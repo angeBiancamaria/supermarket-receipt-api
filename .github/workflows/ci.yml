@@ -1,19 +1,34 @@
-name: "CI"
+name: CI
 
-"on": ["push"]
-
-permissions:
-  contents: "read"
+on:
+  push:
+    branches:
+      - "**"
 
 jobs:
-  ci:
-    name: "CI à compléter"
-    runs-on: "ubuntu-latest"
-    timeout-minutes: 5
-    steps:
-      - name: "Récupérer le code"
-        uses: "actions/checkout@v7.0.1"
-        with:
-          persist-credentials: false
+  quality:
+    runs-on: ubuntu-latest
 
-      # À compléter pendant le TD : environnement, dépendances et vérifications.
+    steps:
+      - name: Recuperer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Installer uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Installer les dependances
+        run: uv sync --locked
+
+      - name: Verifier le lint
+        run: uv run ruff check .
+
+      - name: Verifier le formatage
+        run: uv run ruff format --check .
+
+      - name: Executer les tests avec couverture
+        run: uv run pytest --cov=supermarket_receipt_api --cov-report=term-missing
