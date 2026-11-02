@@ -33,7 +33,7 @@ def test_line_subtotal_nominal(
 
 @pytest.mark.parametrize(
     "subtotal_cents, discount_percent, expected",
-    [(1000, 20, 200), (1200, 10, 120), (800, 25, 200)]
+    [(1000, 20, 200), (1200, 10, 120), (800, 25, 200), (105, 10, 11),]
     + [(100 * amount_euros, 10, 10 * amount_euros) for amount_euros in range(20, 114)],
 )
 def test_percentage_discount_nominal(
