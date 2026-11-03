@@ -54,3 +54,7 @@ def test_requete_refusee():
 
     assert "detail" in erreur
     assert erreur["detail"]
+
+
+def test_format_volontairement_casse():
+    assert(1==1)
