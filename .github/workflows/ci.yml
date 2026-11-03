@@ -23,16 +23,11 @@ jobs:
       - name: Recuperer le code
         uses: actions/checkout@v4
 
-      - name: Installer Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Installer uv
-        uses: astral-sh/setup-uv@v6
-
-      - name: Installer les dependances
-        run: uv sync --locked
+      - name: Prepare environment
+        uses: ./.github/actions/prepare
 
       - name: Lint
         if: matrix.check == 'lint'
@@ -66,6 +61,21 @@ jobs:
     steps:
       - name: Recuperer le code
         uses: actions/checkout@v4
+
+       name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare environment
+        uses: ./.github/actions/prepare
+
+      - name: Build package
+        run: uv build
+
+      - name: Upload distribution
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package
+          path: dist/
 
       - name: Installer Python
         uses: actions/setup-python@v5
