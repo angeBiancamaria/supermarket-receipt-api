@@ -7,11 +7,7 @@ client = TestClient(app)
 
 def test_panier_accepte():
     # Le client commande 2 briques de lait
-    panier = {
-        "items": [
-            {"product_id": "milk", "quantity": 2}
-        ]
-    }
+    panier = {"items": [{"product_id": "milk", "quantity": 2}]}
 
     response = client.post("/checkout", json=panier)
 
