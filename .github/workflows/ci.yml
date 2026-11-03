@@ -87,3 +87,36 @@ jobs:
           name: python-package
           path: dist/
           if-no-files-found: error
+  verify-artifacts:
+    name: Verifier les artifacts
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Telecharger le rapport
+        uses: actions/download-artifact@v4
+        with:
+          name: test-reports
+          path: rapports/
+
+      - name: Telecharger la distribution
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package
+          path: distribution/
+
+      - name: Afficher les fichiers
+        run: |
+          echo "=== Rapports ==="
+          ls -R rapports/
+
+          echo "=== Distribution ==="
+          ls -R distribution/
+
+      - name: Verifier les fichiers
+        run: |
+          test -f rapports/coverage.xml
+          test -f rapports/report.xml
+          test -f rapports/htmlcov/index.html
+          find distribution/ -name "*.whl" | grep -q .
+          find distribution/ -name "*.tar.gz" | grep -q .
